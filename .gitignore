@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment / secrets — NEVER commit
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Data — raw imports too large; transformed JSONL is committed
+data/raw/
+data/*.db
+data/*.sqlite
+data/cache/
+
+# Eval runs — only baseline.json is committed
+eval_results/runs/
+eval_results/*.csv
+eval_results/*.parquet
+
+# Notebooks — keep outputs out of git
+notebooks/.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Postgres docker volume
+.postgres-data/
+
+# pip / uv lockfiles (uv.lock can be committed; pip-cache cannot)
+pip-cache/

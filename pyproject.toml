@@ -1,0 +1,76 @@
+[project]
+name = "familyhq-rag"
+version = "0.1.0"
+description = "RAG over FamilyHQ trend data + product corpus. Mistral API + pgvector + FastAPI."
+authors = [{ name = "Mark Teji", email = "mteji24@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+
+dependencies = [
+    # Mistral SDK — embeddings, generation, translation
+    "mistralai>=1.0.0",
+    # Postgres + pgvector
+    "psycopg[binary,pool]>=3.2.0",
+    "pgvector>=0.3.0",
+    # API
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.5.0",
+    # CLI
+    "typer>=0.13.0",
+    # Env management
+    "python-dotenv>=1.0.0",
+    # PDF extraction
+    "pypdf>=5.1.0",
+    # HTTP for any non-Mistral fetch
+    "httpx>=0.27.0",
+    # Pretty terminal output
+    "rich>=13.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.7.0",
+    "ipykernel>=6.29.0",
+    "matplotlib>=3.9.0",
+    "pandas>=2.2.0",
+]
+
+# LangChain comparison module — installed separately to keep the main pipeline lean
+langchain = [
+    "langchain>=0.3.0",
+    "langchain-mistralai>=0.2.0",
+    "langchain-postgres>=0.0.12",
+]
+
+# Demo UI
+demo = [
+    "streamlit>=1.40.0",
+]
+
+[project.scripts]
+familyhq-rag = "src.cli:app"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["src", "src.chunking", "src.frameworks", "src.eval"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+asyncio_mode = "auto"
