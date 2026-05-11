@@ -103,9 +103,14 @@ def similarity_search(query: str, k: int = 5, source: str | None = None) -> list
 
 
 def print_hits(query: str, hits: list[RetrievalHit], elapsed_ms: float) -> None:
-    """Pretty-print retrieval results in a Rich table."""
+    """Pretty-print retrieval results in a Rich table.
+
+    Shows doc `id` (the documents.id PK) so eval labelers can copy IDs into
+    eval_set.jsonl's relevant_doc_ids list.
+    """
     table = Table(title=f'Query: "{query}"  ({len(hits)} hits in {elapsed_ms:.0f}ms)', show_lines=True)
     table.add_column("#", style="dim", width=3)
+    table.add_column("id", justify="right", style="bold yellow", width=4)
     table.add_column("sim", justify="right", style="cyan")
     table.add_column("source", style="green", width=8)
     table.add_column("platform", style="magenta", width=12)
@@ -115,6 +120,7 @@ def print_hits(query: str, hits: list[RetrievalHit], elapsed_ms: float) -> None:
     for i, h in enumerate(hits, 1):
         table.add_row(
             str(i),
+            str(h.id),
             f"{h.similarity:.3f}",
             h.source,
             h.platform or "—",
@@ -122,13 +128,23 @@ def print_hits(query: str, hits: list[RetrievalHit], elapsed_ms: float) -> None:
             (h.title or "")[:40],
         )
     console.print(table)
+    # Easy-paste line for eval labeling
+    ids = [h.id for h in hits]
+    console.print(f"[dim]Doc IDs (in rank order): {ids}[/dim]")
 
 
 if __name__ == "__main__":
-    query = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "what trends relate to family or household"
-    console.print(f"[dim]Searching for:[/dim] [bold]{query}[/bold]\n")
+    # CLI: python -m src.retrieve "<query>" [k]
+    # If the last arg is an integer, treat it as k (default 5).
+    args = sys.argv[1:]
+    k = 5
+    if args and args[-1].isdigit():
+        k = int(args[-1])
+        args = args[:-1]
+    query = " ".join(args) if args else "what trends relate to family or household"
+    console.print(f"[dim]Searching for:[/dim] [bold]{query}[/bold]  [dim](k={k})[/dim]\n")
     t0 = time.perf_counter()
-    hits = similarity_search(query, k=5)
+    hits = similarity_search(query, k=k)
     elapsed_ms = (time.perf_counter() - t0) * 1000
     if not hits:
         console.print("[red]No results — is the documents table populated? Run `make ingest` first.[/red]")
