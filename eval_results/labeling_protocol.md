@@ -1,4 +1,4 @@
-# Eval Set Labeling Protocol — FamilyHQ RAG
+# Eval Set Labeling Protocol — Production RAG Eval
 
 **Created:** 2026-05-09
 **Eval set target:** 30 hand-labeled query→relevance pairs
@@ -9,7 +9,7 @@
 
 ## What this eval set measures
 
-Retrieval quality of `pgvector` cosine similarity over the 400-document FamilyHQ trend corpus. Specifically:
+Retrieval quality of `pgvector` cosine similarity over the 400-document trend corpus. Specifically:
 
 - **precision@5** — of the top 5 retrieved, how many are relevant?
 - **recall@10** — of all relevant docs in the corpus, how many appear in top 10?
@@ -29,7 +29,7 @@ We are NOT using graded relevance (0/1/2/3) for the baseline — binary keeps an
 
 ---
 
-## What counts as "relevant" for FamilyHQ trend retrieval
+## What counts as "relevant" for trend retrieval
 
 A document is **relevant** to a query if **at least one** of the following holds:
 
@@ -105,7 +105,7 @@ To get meaningful precision/recall numbers, the 30-query set should span:
 | Specific entity queries (e.g., "hantavirus outbreak") | ~10 | Tests precision — few but exact matches |
 | Multi-aspect queries (e.g., "family budgeting tips") | ~5 | Tests vector similarity for compositional concepts |
 | Negative tests (queries expected to retrieve nothing) | ~3 | Tests that the system can refuse |
-| Family/parenting niche (small corpus segment) | ~4 | The original FamilyHQ use case — test retrieval for the niche slice |
+| Family/parenting niche (small corpus segment) | ~4 | The original niche-use case — test retrieval for the slim slice |
 
 ---
 

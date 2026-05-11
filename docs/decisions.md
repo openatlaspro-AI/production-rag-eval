@@ -89,19 +89,19 @@ Short, dated, opinionated. Each ADR captures *why* a choice was made and what al
 ## ADR-005 — pypdf for product PDF extraction
 **Date:** 2026-05-09 | **Status:** Accepted
 
-**Context:** 3 FamilyHQ product PDFs need text extraction.
+**Context:** 3 product PDFs from the source dataset need text extraction.
 
 **Decision:** `pypdf` for now.
 
 **Why:**
 - Pure Python, no system dependencies.
-- Handles the simple text layout in FamilyHQ PDFs (printable forms with text labels).
+- Handles the simple text layout in the source PDFs (printable forms with text labels).
 
 **Alternatives considered:**
 - *pdfplumber:* better for complex tabular extraction.
 - *unstructured:* more robust but heavier.
 
-**Trade-off:** If FamilyHQ PDFs add complex tables in the future, swap to pdfplumber. Today's PDFs are simple enough.
+**Trade-off:** If the PDFs add complex tables in the future, swap to pdfplumber. Today's PDFs are simple enough.
 
 ---
 

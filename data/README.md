@@ -31,11 +31,13 @@ news_items(
 
 **Privacy:** all titles + URLs are public news. No PII.
 
-### 2. Product corpus — FamilyHQ PDFs + descriptions
+### 2. Product corpus — printable PDF products + descriptions
 
 **Local sources (gitignored):**
-- `~/Documents/FamilyHQ/PDFs_Live/*.pdf` — 3 product PDFs locally; 9 deployed total on [familyhqprints.gumroad.com](https://familyhqprints.gumroad.com)
+- `~/Documents/FamilyHQ/PDFs_Live/*.pdf` — 3 published printable PDFs locally; 9 deployed total to a Gumroad store
 - `~/Documents/FamilyHQ/Scripts/upload_3_new.py` — Python literals containing product titles, prices, and descriptions
+
+> The local path keeps the `FamilyHQ` folder name because that's the actual filesystem location on the author's machine; the repo and dataset framing are independent of it.
 
 **Language:** English.
 
@@ -85,5 +87,5 @@ After running `make ingest`:
 If you want to run this demo without the original sources:
 
 1. Generate a synthetic trend corpus by sampling Wikipedia or HuggingFace datasets — see `notebooks/01_explore_data.ipynb` for a sketch
-2. Use the published product copy from `familyhqprints.gumroad.com`
+2. Use any published commercial product copy you have access to
 3. Adjust `EVAL_SET_PATH` queries in `eval_results/eval_set.jsonl` to match the synthetic corpus

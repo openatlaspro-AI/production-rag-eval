@@ -35,7 +35,7 @@ def main() -> None:
     fig.patch.set_facecolor("white")
 
     # Title
-    ax.text(7, 8.0, "FamilyHQ RAG — Architecture", ha="center", fontsize=20,
+    ax.text(7, 8.0, "Production RAG Eval — Architecture", ha="center", fontsize=20,
             fontweight="bold", color=DARK, family="sans-serif")
     ax.text(7, 7.55, "Production query pipeline (left) + reproducible eval suite (right)",
             ha="center", fontsize=11, color=GRAY)

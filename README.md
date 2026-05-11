@@ -1,4 +1,4 @@
-# FamilyHQ RAG
+# Production RAG Eval
 
 > **Production RAG over a 400-document Chinese-news trend corpus, with a 30-query labeled eval suite. Every README number has a JSON receipt in the repo.**
 
@@ -18,8 +18,8 @@ Full numbers below. Raw data: [`eval_results/consolidated_report.json`](eval_res
 ## Quick start
 
 ```bash
-git clone https://github.com/markteji/familyhq-rag.git
-cd familyhq-rag && cp .env.example .env   # paste your MISTRAL_API_KEY into .env
+git clone https://github.com/openatlaspro-AI/production-rag-eval.git
+cd production-rag-eval && cp .env.example .env   # paste your MISTRAL_API_KEY into .env
 make up ingest                            # postgres + pgvector + 400 docs (~2 min)
 make api                                  # FastAPI on http://localhost:8000
 ```
@@ -126,7 +126,7 @@ Python 3.12 · Mistral API (chat, embed, JSON-mode) · pgvector on Postgres 16 (
 ## Project structure
 
 ```
-familyhq-rag/
+production-rag-eval/
 ├── data/                     # corpus snapshot (committed JSONL)
 │   ├── trend_signals.jsonl   # 400 trends, Chinese + English
 │   └── README.md             # sources + anonymization checklist
@@ -154,9 +154,9 @@ familyhq-rag/
 └── README.md
 ```
 
-## What FamilyHQ is
+## Personal context
 
-[FamilyHQ Printables](https://familyhqprints.gumroad.com) is a personal multi-agent AI engineering project I architected and operate on a Mac Mini M4: nine deployed products, 24/7, Anthropic Claude + OpenAI GPT-4o + Ollama with intelligent model routing, MCP servers for skill module extension, persistent agent memory, Telegram failure recovery. This RAG repo is a slice of that system — the retrieval layer that decides which trends become products.
+This repo was extracted from a larger personal multi-agent AI engineering project I run on a Mac Mini M4. The trend corpus here is the retrieval layer of that system — the part that decides which signals are worth acting on. The full repo is scoped to one thing: showing what a production-grade RAG pipeline plus a real eval harness look like on a small, honestly-labeled corpus.
 
 ## License
 

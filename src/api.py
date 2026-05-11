@@ -22,7 +22,7 @@ from src.config import settings
 from src.generate import ALLOWED_MODELS, generate_rag_response
 from src.retrieve import RetrievalHit
 
-log = logging.getLogger("familyhq-rag.api")
+log = logging.getLogger("production-rag-eval.api")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s — %(message)s")
 
 
@@ -112,9 +112,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="FamilyHQ RAG",
+    title="Production RAG Eval",
     version="0.1.0",
-    description="RAG over FamilyHQ trend signals + product corpus. Mistral + pgvector + FastAPI.",
+    description="RAG over a Chinese-news trend corpus with reproducible eval suite. Mistral + pgvector + FastAPI.",
     lifespan=lifespan,
 )
 
@@ -127,7 +127,7 @@ def health():
     pool_open = app.state.pool is not None and not app.state.pool.closed
     return {
         "status": "ok" if pool_open else "degraded",
-        "service": "familyhq-rag",
+        "service": "production-rag-eval",
         "version": "0.1.0",
         "mistral_configured": bool(settings.mistral_api_key),
         "pool_open": pool_open,

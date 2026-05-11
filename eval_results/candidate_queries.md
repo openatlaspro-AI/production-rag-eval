@@ -18,7 +18,7 @@
 | Real estate | 1% | Shanghai sales, May Day home buying |
 | Social issues | 1% | Crime, fraud, sentencing |
 
-The corpus is **dominated by geopolitics, economy, and sports** — design queries accordingly. Family/parenting is a small slice (the original FamilyHQ angle).
+The corpus is **dominated by geopolitics, economy, and sports** — design queries accordingly. Family/parenting is a small slice (the original niche angle of the source data).
 
 ---
 
@@ -113,11 +113,11 @@ Expect 0 relevant — tests that retrieval doesn't false-match. The LLM should r
 
 ## E. Family / parenting niche queries (target: 4 of 8 listed)
 
-The original FamilyHQ angle. Small corpus slice (3%) so retrieval is a real challenge here.
+The original niche angle of the source dataset. Small corpus slice (3%) so retrieval is a real challenge here.
 
 | # | Query | Type | Predicted relevant | Why useful |
 |---|---|---|---|---|
-| E1 | what trending topics are about parenting or raising children | family-niche | 3-6 | Direct hit on the FamilyHQ use case |
+| E1 | what trending topics are about parenting or raising children | family-niche | 3-6 | Direct hit on the niche family-content use case |
 | E2 | what news discusses marriage or divorce | family-niche | 3-5 | Family relationship subtopic |
 | E3 | what stories mention mothers or motherhood | family-niche | 2-4 | "Mom" specifically |
 | E4 | what trends are about saving money for the family | family-niche | 1-3 | Stretch — corpus has money + family but not specifically family-savings |

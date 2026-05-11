@@ -1,7 +1,7 @@
 [project]
-name = "familyhq-rag"
+name = "production-rag-eval"
 version = "0.1.0"
-description = "RAG over FamilyHQ trend data + product corpus. Mistral API + pgvector + FastAPI."
+description = "Production RAG over a Chinese-news trend corpus with a 30-query labeled eval suite. Mistral API + pgvector + FastAPI."
 authors = [{ name = "Mark Teji", email = "mteji24@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.12"
@@ -54,7 +54,7 @@ demo = [
 ]
 
 [project.scripts]
-familyhq-rag = "src.cli:app"
+production-rag-eval = "src.cli:app"
 
 [build-system]
 requires = ["setuptools>=68.0"]
