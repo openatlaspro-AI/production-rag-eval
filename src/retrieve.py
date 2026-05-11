@@ -1,4 +1,12 @@
-"""Similarity search over pgvector documents. Returns top-k by cosine similarity."""
+"""Similarity search over pgvector documents. Returns top-k by cosine similarity.
+
+Two-function split (refactored Day 3):
+  - embed_query(client, query) — embedding only, takes Mistral client
+  - pgvector_search(conn, q_emb, k, source) — DB query only, takes psycopg connection
+  - similarity_search(query, ...) — convenience wrapper for CLI/standalone use
+
+This split lets src/api.py reuse a connection pool + Mistral client across requests.
+"""
 
 from __future__ import annotations
 
@@ -30,26 +38,27 @@ class RetrievalHit:
     metadata: dict
 
 
-def embed_query(client: Mistral, query: str) -> np.ndarray:
-    """Embed a single query via mistral-embed."""
-    response = client.embeddings.create(model=settings.mistral_embed_model, inputs=[query])
-    return np.array(response.data[0].embedding, dtype=np.float32)
+def embed_query(client: Mistral, query: str) -> tuple[np.ndarray, int]:
+    """Embed a single query via mistral-embed.
 
-
-def similarity_search(query: str, k: int = 5, source: str | None = None) -> list[RetrievalHit]:
-    """Top-k cosine similarity over documents.embedding.
-
-    Args:
-        query: natural-language query (English)
-        k: number of results
-        source: optional filter — 'trend' or 'product'
-
-    Returns:
-        List of RetrievalHit, sorted by similarity desc.
+    Returns (embedding_vector, input_tokens) so the caller can track cost.
     """
-    client = Mistral(api_key=settings.mistral_api_key)
-    q_emb = embed_query(client, query)
+    response = client.embeddings.create(model=settings.mistral_embed_model, inputs=[query])
+    emb = np.array(response.data[0].embedding, dtype=np.float32)
+    tokens_in = response.usage.prompt_tokens if response.usage else 0
+    return emb, tokens_in
 
+
+def pgvector_search(
+    conn: psycopg.Connection,
+    q_emb: np.ndarray,
+    k: int = 5,
+    source: str | None = None,
+) -> list[RetrievalHit]:
+    """Top-k cosine similarity over documents.embedding using a passed-in connection.
+
+    Connection must have pgvector registered (call register_vector(conn) once).
+    """
     where_clause = ""
     params: list = [q_emb]
     if source:
@@ -66,11 +75,9 @@ def similarity_search(query: str, k: int = 5, source: str | None = None) -> list
         LIMIT %s
     """
 
-    with psycopg.connect(settings.postgres_dsn) as conn:
-        register_vector(conn)
-        with conn.cursor() as cur:
-            cur.execute(sql, params)
-            rows = cur.fetchall()
+    with conn.cursor() as cur:
+        cur.execute(sql, params)
+        rows = cur.fetchall()
 
     return [
         RetrievalHit(
@@ -80,6 +87,19 @@ def similarity_search(query: str, k: int = 5, source: str | None = None) -> list
         )
         for r in rows
     ]
+
+
+def similarity_search(query: str, k: int = 5, source: str | None = None) -> list[RetrievalHit]:
+    """Convenience wrapper for CLI/standalone use — creates fresh client + connection.
+
+    For API/eval, prefer the split functions with a shared client + pool.
+    """
+    client = Mistral(api_key=settings.mistral_api_key)
+    q_emb, _ = embed_query(client, query)
+
+    with psycopg.connect(settings.postgres_dsn) as conn:
+        register_vector(conn)
+        return pgvector_search(conn, q_emb, k=k, source=source)
 
 
 def print_hits(query: str, hits: list[RetrievalHit], elapsed_ms: float) -> None:
