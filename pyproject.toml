@@ -9,7 +9,8 @@ license = { text = "MIT" }
 
 dependencies = [
     # Mistral SDK — embeddings, generation, translation
-    "mistralai>=1.0.0",
+    # Pinned to 1.x: 2.x has a broken namespace-package layout (no top-level __init__.py exporting Mistral class)
+    "mistralai>=1.5.0,<2.0.0",
     # Postgres + pgvector
     "psycopg[binary,pool]>=3.2.0",
     "pgvector>=0.3.0",
