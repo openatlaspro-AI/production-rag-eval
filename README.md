@@ -55,14 +55,28 @@ Hand-labeled 30-query eval set against the 400-document corpus. Three negative-t
 
 ### End-to-end (with generation)
 
-> 🚧 LLM-judge eval lands 2026-05-13 (Day 5). Latency / cost smoke-test numbers below from Day 3.
+Full eval run: 60 RAG calls + 54 judge calls + 6 refusal-judge calls. Total cost $0.0340. Wall time 22 min (sequential judge calls to stay under Mistral free-tier rate limits). Reproducible via `make eval`; raw results in [`eval_results/consolidated_report.json`](eval_results/consolidated_report.json).
 
 | Metric | mistral-small-latest | mistral-large-latest |
 |---|---|---|
-| Cost per query | $0.000087 | $0.001291 |
-| Latency total p50 | ~1,400 ms | ~5,300 ms |
-| LLM-judge score (1-5) | TBD | TBD |
-| Refusal on negative tests | TBD | TBD |
+| **Cost per query** | **$0.000097** | $0.001034 (~10× small) |
+| **Latency total p50** | **1,222 ms** | 2,877 ms (~2.4× small) |
+| Latency total p95 | 1,655 ms | 8,016 ms |
+| Latency total p99 | 2,215 ms | 12,700 ms |
+| LLM-judge overall (1–5) | **4.56** | 4.59 |
+| LLM-judge groundedness | 4.74 | 4.67 |
+| LLM-judge relevance | 4.93 | 4.85 |
+| LLM-judge completeness | 4.07 | 4.04 |
+| LLM-judge conciseness | 4.81 | 4.74 |
+| LLM-judge citation accuracy | **5.00** | **5.00** |
+| Refusal rate on negative tests | **3/3 (100%)** | **3/3 (100%)** |
+| Hallucination on negative tests | **0/3 (0%)** | **0/3 (0%)** |
+
+Judge model: `mistral-large-latest` (deterministic, temperature=0, JSON-mode output). Rubric in [`src/eval/llm_judge.py`](src/eval/llm_judge.py).
+
+**Key finding: mistral-small is the production-default choice.** It delivers essentially tied LLM-judge overall score (4.56 vs 4.59) at **10× lower cost** and **2.4× lower median latency**. Reserve mistral-large for queries where you can spend the budget and accept the latency — same conclusions on this corpus.
+
+**Completeness is the lowest dimension across both models (~4.05)**. The system reliably stays grounded and accurate but doesn't always pull in every relevant retrieved source. Reranking + chunk-level retrieval would address this directly — flagged in "What I'd do next" below.
 
 ## Why these decisions
 
@@ -86,10 +100,12 @@ make api              # FastAPI on http://localhost:8000
 
 ## Trade-offs and what I'd do next
 
+- **Completeness (4.05/5) is the weakest LLM-judge dimension.** The generation is reliably grounded and on-topic, but doesn't always weave in every relevant source. Two fixes I'd try: (a) cross-encoder reranking on top-10 before generation, (b) longer context window with explicit "use ALL provided sources unless irrelevant" prompt instruction.
 - **Single-stage retrieval today.** Reranking with a cross-encoder would push precision@5 by ~0.08 at +120ms latency.
-- **Eval set is 30 hand-labeled queries.** Production version needs 300+ with inter-annotator agreement.
-- **No caching layer.** For real customer load, Redis cache on `(query, model)` → response with TTL of 1 hour.
+- **Eval set is 30 hand-labeled queries.** Production version needs 300+ with inter-annotator agreement, and graded relevance (0/1/2/3) instead of binary.
+- **No caching layer.** For real customer load, Redis cache on `(query, model)` → response with TTL of 1 hour. At median 1.2s per query for mistral-small, a 50% cache hit rate would halve perceived latency.
 - **Translation at ingest, not query time.** Latency win at retrieval, but means English query → English content match. Real production system would translate queries too.
+- **Mistral free-tier rate limits forced sequential judge calls.** Eval suite includes `src/eval/_retry.py` with exponential backoff. On a paid tier the full eval would run in ~5 min instead of 22.
 
 ## Stack
 
