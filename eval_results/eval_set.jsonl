@@ -1,30 +1,30 @@
-{"id": 1, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 2, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 3, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 4, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 5, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 6, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 7, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 8, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 9, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 10, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 11, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 12, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 13, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 14, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 15, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 16, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 17, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 18, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 19, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 20, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 21, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 22, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 23, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 24, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 25, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 26, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 27, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 28, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 29, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
-{"id": 30, "query": "TODO", "relevant_doc_ids": [], "notes": ""}
+{"id": 1, "query": "what trends are about US-China geopolitics or trade", "relevant_doc_ids": [361, 371, 385, 204, 101, 7, 390, 98], "notes": "dropped 272 (FIFA dispute) and 214 (UK-China not US-China)"}
+{"id": 2, "query": "what trending topics relate to Chinese economic indicators", "relevant_doc_ids": [238, 239, 237, 219, 43], "notes": "kept economic data (May Day spending, real estate, A-shares, yuan); dropped geopolitics (390, 204) and sports business (164, 358) and AI infra (217)"}
+{"id": 3, "query": "what news involves Iran or the Middle East", "relevant_doc_ids": [124, 172, 179, 122, 212, 312, 146, 105, 108, 269], "notes": "all 10 directly relevant - Iran/Hormuz/US-Iran cluster well-represented in corpus"}
+{"id": 4, "query": "what sports stories are trending right now", "relevant_doc_ids": [140, 313, 190, 1, 346, 76, 87, 246], "notes": "kept World Cup broadcast cluster + table tennis; dropped finance newsletter (334) and US-Iran/chip stocks (212)"}
+{"id": 5, "query": "what entertainment news is being discussed online", "relevant_doc_ids": [210, 266, 171], "notes": "low corpus coverage for entertainment - kept movie ranking (210), influencer drama (266), TV broadcaster news (171); dropped sports business cluster, legal news, finance"}
+{"id": 6, "query": "what trends involve stock markets and trading", "relevant_doc_ids": [398, 279, 212, 104, 334, 143, 264, 217, 124, 366], "notes": "all 10 directly relevant - strong Wall Street/stock market cluster in corpus (wallstreetcn platform overrepresented)"}
+{"id": 7, "query": "which trends are about Chinese government policy or officials", "relevant_doc_ids": [214, 145, 237, 220, 361], "notes": "kept direct gov't policy/officials (UK response, Anhui official, Beijing policy, Wang Yi, Trump-China MOFA); dropped tangential mentions (Brazil visa is Brazil's policy, table tennis is sports, FIFA is sports diplomacy)"}
+{"id": 8, "query": "what topics are most viral on Chinese social media this week", "relevant_doc_ids": [239, 370, 68, 358, 253, 210, 162, 209], "notes": "kept viral social media content (tieba debates, douyin trends, viral controversies); dropped Taiwan geopolitics (390) - widely reported not viral, and state media op-ed (227)"}
+{"id": 9, "query": "what is the hantavirus outbreak situation", "relevant_doc_ids": [94, 270, 328, 370, 303, 170, 215, 60, 325, 399], "notes": "all 10 directly about hantavirus - perfect cluster (outbreak news, prevention, CDC response, Taiwan death, vaccine stocks, WHO statement)"}
+{"id": 10, "query": "tell me about the Hormuz strait military situation", "relevant_doc_ids": [172, 179, 123, 146, 269, 108, 102, 312], "notes": "kept Hormuz/Iran military cluster including 172 (Saudi/Hormuz tensions explicit), 179 (Hormuz lanes), 312 (Iran's largest island - in Hormuz region); dropped stock market reactions (124, 212)"}
+{"id": 11, "query": "what is happening with Trump and China relations", "relevant_doc_ids": [361, 101, 98, 382, 204, 385], "notes": "kept direct Trump-China content + China's responses (361, 101, 98, 382), Taiwan-in-Trump-talks (204), three-stops warning to US (385); dropped UK sanctions, FIFA, generic Taiwan, Iran ambassador"}
+{"id": 12, "query": "who is Faker and what is happening in his career", "relevant_doc_ids": [5, 45, 259, 277], "notes": "perfect entity precision - top 4 are all Faker content (retirement/politics, Ryu Jisu collab, cross-dimensional, Chengdu arrival); rank 5-10 are keyword noise on totally different topics"}
+{"id": 13, "query": "what news mentions the World Cup broadcast rights", "relevant_doc_ids": [76, 1, 392, 190, 140, 114, 141, 358, 313], "notes": "kept all rights-mentioning docs including 190 (FIFA exorbitant rights), 358 (broadcast deals with Chinese broadcasters), 313 (rights talks negotiations); dropped 346 (sponsors, not rights)"}
+{"id": 14, "query": "what is the China men's table tennis team doing", "relevant_doc_ids": [87, 246, 387, 154], "notes": "kept men's team matches + Wang Chuqin (men's player); dropped women's team (155), other sports, geopolitics noise"}
+{"id": 15, "query": "what are people saying about the Jiajie sandwich incident", "relevant_doc_ids": [38], "notes": "only 1 doc directly about Jiajie sandwich incident - corpus has limited coverage of this specific event; ranks 2-10 are unrelated viral incidents (eval finding: precision@1 = 1.0 but recall@10 drops off cliff)"}
+{"id": 16, "query": "what is the Real Madrid locker room news", "relevant_doc_ids": [166], "notes": "only 1 doc - Real Madrid locker room specific event; ranks 2-10 are unrelated noise (Messi tangentially, World Cup, Trump, finance)"}
+{"id": 17, "query": "what is happening in Shanghai real estate", "relevant_doc_ids": [219], "notes": "only 219 is Shanghai real estate specifically; 237 is Beijing (different city); rest unrelated"}
+{"id": 18, "query": "what news mentions Wang Yi the Chinese foreign minister", "relevant_doc_ids": [220, 49], "notes": "strict named-entity match - only 220 and 49 directly mention Wang Yi; MOFA generic mentions (361) excluded since query specified the person not the ministry"}
+{"id": 19, "query": "what is happening with Chinese tariffs and US trade response", "relevant_doc_ids": [361, 98, 101, 382, 385], "notes": "no direct tariff docs in corpus; kept US-China political tension docs (Trump talks, three-stops warning); dropped UK sanctions, sports, Taiwan"}
+{"id": 20, "query": "what trends discuss housing prices during the May Day holiday", "relevant_doc_ids": [219], "notes": "strict multi-aspect - only 219 has BOTH housing AND May Day; corpus has May Day spending docs (no housing) and Beijing housing policy (no May Day) but only Shanghai doc hits both"}
+{"id": 21, "query": "what stories are about food poisoning or restaurant safety", "relevant_doc_ids": [209, 147, 67, 38, 314], "notes": "broad OR query - kept food poisoning (209, 38), restaurant safety/hygiene (147), restaurant regulation (67), consumer fraud (314); dropped hantavirus (virus not food), entertainment, cultural food"}
+{"id": 22, "query": "what trends discuss government corruption or sentencing", "relevant_doc_ids": [135, 2], "notes": "kept PLA corruption commentary (135) and Wei Fenghe/Li Shangfu death sentences (2); note: ID 145 (Anhui official investigation) would be relevant but didn't surface in top 10 - eval finding for recall gap"}
+{"id": 23, "query": "what is happening with stock markets and oil prices", "relevant_doc_ids": [301, 124, 48, 212, 179, 398, 43, 104, 264], "notes": "broad stocks+oil cluster - kept 9/10 covering US stocks, oil prices, Iran-driven market moves; dropped 7 which is about commodity prices unrelated to oil/markets"}
+{"id": 24, "query": "how do I implement a binary search tree in Python", "relevant_doc_ids": [], "notes": "negative test - corpus has zero programming docs. Top results are random noise (hantavirus, garlic, games, AI infra). Tests system refusal behavior."}
+{"id": 25, "query": "what are the best practices for FastAPI authentication", "relevant_doc_ids": [], "notes": "negative test - corpus has no tech docs. Top results are random noise (AI valuations, hantavirus, food poisoning). Tests system refusal."}
+{"id": 26, "query": "how do I treat my child's ear infection", "relevant_doc_ids": [], "notes": "negative test - corpus has no clinical/medical advice. Top results pulled parenting docs (96, 383) and hantavirus general health, but no ear infection treatment guidance. Tests refusal."}
+{"id": 27, "query": "what trending topics are about parenting or raising children", "relevant_doc_ids": [383, 96, 51], "notes": "family niche - only 3 hits in top 10 (raising child, mom questionnaire, Disney parents outrage). Corpus has minimal parenting coverage as expected. Eval finding for family corpus gap."}
+{"id": 28, "query": "what news discusses marriage or divorce", "relevant_doc_ids": [293, 241, 248, 116, 266, 93], "notes": "marriage/divorce cluster - 6 hits including infidelity, divorce, marriage advice, bride price, daughter-in-law disapproval; dropped finance/health noise"}
+{"id": 29, "query": "what stories mention mothers or motherhood", "relevant_doc_ids": [240, 263, 96, 74, 383, 241], "notes": "motherhood cluster - Mother's Day content (240, 263), mom-focused (96, 74), parenting (383), mother-of-six (241); dropped historical figure's daughter, plagiarism, women's rights, infidelity"}
+{"id": 30, "query": "what stories discuss family budgeting or household finances", "relevant_doc_ids": [116, 350, 52, 266], "notes": "family finance niche - 4 hits including save money advice (116), inherited debt (350), kid attitudes toward money (52), bride price (266); minimal household budgeting content in corpus (eval finding)"}
