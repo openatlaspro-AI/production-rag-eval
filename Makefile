@@ -1,4 +1,4 @@
-.PHONY: help up down logs ingest api eval demo embeddings test fmt clean
+.PHONY: help up down logs ingest api eval eval-langchain demo embeddings test fmt clean
 
 # Default target
 help:
@@ -12,6 +12,7 @@ help:
 	@echo "  make demo       Start Streamlit demo (uses in-memory embeddings; no Postgres needed)"
 	@echo "  make embeddings One-shot: regenerate data/embeddings.npy for the demo"
 	@echo "  make eval       Run full eval suite (retrieval + latency + cost + llm_judge)"
+	@echo "  make eval-langchain  Same eval suite via the LangChain implementation (writes to eval_results/langchain/)"
 	@echo "  make test       Run pytest"
 	@echo "  make fmt        Run ruff format + lint"
 	@echo "  make clean      Remove pycache, eval runs (keeps baseline.json)"
@@ -42,6 +43,9 @@ embeddings:
 
 eval:
 	python -m src.eval.run_all
+
+eval-langchain:
+	python -m src.eval.run_langchain
 
 test:
 	pytest -v

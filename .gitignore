@@ -32,6 +32,7 @@ eval_results/runs/
 eval_results/*.csv
 eval_results/*.parquet
 eval_results/.raw_runs.json
+eval_results/langchain/.raw_runs.json
 
 # Notebooks — keep outputs out of git
 notebooks/.ipynb_checkpoints/

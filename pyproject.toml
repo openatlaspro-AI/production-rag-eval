@@ -41,11 +41,14 @@ dev = [
     "pandas>=2.2.0",
 ]
 
-# LangChain comparison module — installed separately to keep the main pipeline lean
+# LangChain comparison module — installed separately to keep the main pipeline lean.
+# Used by src/frameworks/langchain_rag.py + src/eval/run_langchain.py.
+# Hybrid retrieval (BaseRetriever subclass wrapping our pgvector_search), so we
+# intentionally do NOT depend on langchain-postgres / PGVector.
 langchain = [
     "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
     "langchain-mistralai>=0.2.0",
-    "langchain-postgres>=0.0.12",
 ]
 
 # Demo UI
