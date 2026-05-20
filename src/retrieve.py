@@ -15,9 +15,7 @@ import time
 from dataclasses import dataclass
 
 import numpy as np
-import psycopg
 from mistralai import Mistral
-from pgvector.psycopg import register_vector
 from rich.console import Console
 from rich.table import Table
 
@@ -50,7 +48,7 @@ def embed_query(client: Mistral, query: str) -> tuple[np.ndarray, int]:
 
 
 def pgvector_search(
-    conn: psycopg.Connection,
+    conn: "psycopg.Connection",  # type: ignore[name-defined]  # noqa: F821
     q_emb: np.ndarray,
     k: int = 5,
     source: str | None = None,
@@ -94,6 +92,9 @@ def similarity_search(query: str, k: int = 5, source: str | None = None) -> list
 
     For API/eval, prefer the split functions with a shared client + pool.
     """
+    import psycopg
+    from pgvector.psycopg import register_vector
+
     client = Mistral(api_key=settings.mistral_api_key)
     q_emb, _ = embed_query(client, query)
 
