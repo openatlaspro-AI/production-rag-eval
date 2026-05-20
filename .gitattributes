@@ -1,0 +1,4 @@
+# Future-proofing: if data/embeddings.npy ever grows large enough to want LFS,
+# uncomment the line below and run `git lfs track "data/*.npy"`.
+# At 1.6 MB (400 × 1024 float32) a direct commit is still fine.
+# data/*.npy filter=lfs diff=lfs merge=lfs -text

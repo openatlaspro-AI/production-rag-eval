@@ -1,4 +1,4 @@
-.PHONY: help up down logs ingest api eval demo test fmt clean
+.PHONY: help up down logs ingest api eval demo embeddings test fmt clean
 
 # Default target
 help:
@@ -9,7 +9,8 @@ help:
 	@echo "  make logs       Tail postgres logs"
 	@echo "  make ingest     Parse trend SQLite + product PDFs → embed → pgvector"
 	@echo "  make api        Start FastAPI on http://localhost:8000"
-	@echo "  make demo       Start Streamlit demo"
+	@echo "  make demo       Start Streamlit demo (uses in-memory embeddings; no Postgres needed)"
+	@echo "  make embeddings One-shot: regenerate data/embeddings.npy for the demo"
 	@echo "  make eval       Run full eval suite (retrieval + latency + cost + llm_judge)"
 	@echo "  make test       Run pytest"
 	@echo "  make fmt        Run ruff format + lint"
@@ -34,7 +35,10 @@ api:
 	uvicorn src.api:app --reload --host 0.0.0.0 --port 8000
 
 demo:
-	streamlit run streamlit_app.py
+	streamlit run app/streamlit_app.py
+
+embeddings:
+	python -m scripts.precompute_embeddings
 
 eval:
 	python -m src.eval.run_all

@@ -1,0 +1,9 @@
+# Streamlit Cloud install target. Local dev still uses pyproject.toml (`pip install -e .[dev,demo]`).
+# Only the deps the demo actually loads — psycopg / pgvector / fastapi are NOT needed
+# because src/retrieve.py lazy-imports them and the demo uses src/retrieve_inmemory.py.
+streamlit>=1.40.0
+mistralai>=1.5.0,<2.0.0
+numpy>=1.26.0
+pydantic>=2.9.0
+pydantic-settings>=2.5.0
+rich>=13.9.0

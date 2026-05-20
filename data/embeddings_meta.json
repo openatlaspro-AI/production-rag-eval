@@ -1,0 +1,7 @@
+{
+  "model": "mistral-embed",
+  "n_docs": 400,
+  "dim": 1024,
+  "generated_at": "2026-05-20T00:33:04.189942+00:00",
+  "source_jsonl": "trend_signals.jsonl"
+}
