@@ -17,7 +17,7 @@ Full numbers below. Raw data: [`eval_results/consolidated_report.json`](eval_res
 
 ## Live demo
 
-Try it without cloning: **https://production-rag-eval.streamlit.app** *(URL pending deploy)*
+Try it without cloning: **https://openatlaspro-rag-eval.streamlit.app**
 
 Same Mistral pipeline as the production FastAPI service, with one substitution: retrieval runs over pre-computed embeddings in numpy (`src/retrieve_inmemory.py`) instead of pgvector — Streamlit Cloud doesn't run Postgres. Same answer quality, same instrumentation (latency, cost, citations). Production pgvector path in `src/retrieve.py` is untouched.
 
