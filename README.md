@@ -49,6 +49,24 @@ To reproduce the full eval (60 RAG calls + 54 judge calls, ~$0.03):
 make eval                                 # writes eval_results/consolidated_report.json
 ```
 
+## Framework comparison: native vs LangChain
+
+The same 30-query eval suite ran against a LangChain reimplementation of the retrieve+generate path (`src/frameworks/langchain_rag.py`) using `MistralAIEmbeddings`, `ChatMistralAI`, `BaseRetriever`, and LCEL. Same pgvector backend, same prompt, same models.
+
+| Metric (small-model) | Native | LangChain |
+|---|---:|---:|
+| Retrieval P@5 / R@5 / MRR | **0.681 / 0.730 / 0.920** | **0.681 / 0.730 / 0.920** (identical) |
+| LLM-judge overall | 4.56 | 4.48 (within noise at n=27) |
+| Refusal rate (negatives) | 100% | 100% |
+| Total p50 latency | **1222 ms** | **1663 ms** (+36%) |
+| Total eval cost | $0.0340 | $0.0339 |
+
+**Headline:** LangChain matches on quality and refusal, costs the same, runs ~30% slower on small-model RAG, and required dropping eval concurrency from 2 → 1 because LangChain wraps `mistralai.SDKError` in its own exception type and defeats type-discriminated retry. Full numbers, six concrete engineer's frustrations, and "when to use / when not to" → [`eval_results/langchain_vs_native.md`](eval_results/langchain_vs_native.md).
+
+Reproduce: `make eval` (native) + `make eval-langchain` (LangChain). Each ~$0.03, ~20 min.
+
+All 6 JSON files in `eval_results/langchain/` are committed — anyone can compare the runs without re-spending the $0.03.
+
 ## Architecture
 
 ![Architecture diagram](docs/architecture.png)

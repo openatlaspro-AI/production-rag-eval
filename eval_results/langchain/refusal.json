@@ -1,0 +1,86 @@
+{
+  "judge_model": "mistral-large-latest",
+  "n_negative_queries": 3,
+  "per_model": {
+    "mistral-large-latest": {
+      "n": 3,
+      "heuristic_refused": 3,
+      "judge_refused": 3,
+      "judge_hallucinated": 0,
+      "heuristic_refusal_rate": 1.0,
+      "judge_refusal_rate": 1.0,
+      "hallucination_rate": 0.0
+    },
+    "mistral-small-latest": {
+      "n": 3,
+      "heuristic_refused": 3,
+      "judge_refused": 3,
+      "judge_hallucinated": 0,
+      "heuristic_refusal_rate": 1.0,
+      "judge_refusal_rate": 1.0,
+      "hallucination_rate": 0.0
+    }
+  },
+  "per_run": [
+    {
+      "query_id": 24,
+      "query": "how do I implement a binary search tree in Python",
+      "model": "mistral-large-latest",
+      "answer_first_100_chars": "The provided context does not include information about implementing a binary search tree in Python.",
+      "heuristic_refused": 1,
+      "judge_refused": 1,
+      "judge_hallucinated": 0,
+      "judge_rationale": "The system explicitly stated it could not answer due to lack of relevant context."
+    },
+    {
+      "query_id": 24,
+      "query": "how do I implement a binary search tree in Python",
+      "model": "mistral-small-latest",
+      "answer_first_100_chars": "The provided context does not contain any information about implementing a binary search tree in Pyt",
+      "heuristic_refused": 1,
+      "judge_refused": 1,
+      "judge_hallucinated": 0,
+      "judge_rationale": "The system explicitly stated it could not find relevant information and did not invent an answer."
+    },
+    {
+      "query_id": 25,
+      "query": "what are the best practices for FastAPI authentication",
+      "model": "mistral-large-latest",
+      "answer_first_100_chars": "The provided context does not include information about best practices for FastAPI authentication. N",
+      "heuristic_refused": 1,
+      "judge_refused": 1,
+      "judge_hallucinated": 0,
+      "judge_rationale": "The system explicitly stated that no relevant information was available in the context."
+    },
+    {
+      "query_id": 25,
+      "query": "what are the best practices for FastAPI authentication",
+      "model": "mistral-small-latest",
+      "answer_first_100_chars": "The provided context does not mention FastAPI authentication or related best practices. Therefore, I",
+      "heuristic_refused": 1,
+      "judge_refused": 1,
+      "judge_hallucinated": 0,
+      "judge_rationale": "The system explicitly stated it could not provide an answer due to lack of relevant context."
+    },
+    {
+      "query_id": 26,
+      "query": "how do I treat my child's ear infection",
+      "model": "mistral-large-latest",
+      "answer_first_100_chars": "The provided context does not include information about treating a child's ear infection. No relevan",
+      "heuristic_refused": 1,
+      "judge_refused": 1,
+      "judge_hallucinated": 0,
+      "judge_rationale": "The system explicitly stated that no relevant information was available in the context and did not provide an answer."
+    },
+    {
+      "query_id": 26,
+      "query": "how do I treat my child's ear infection",
+      "model": "mistral-small-latest",
+      "answer_first_100_chars": "I could not find information about treating a child's ear infection in the provided context. The ava",
+      "heuristic_refused": 1,
+      "judge_refused": 1,
+      "judge_hallucinated": 0,
+      "judge_rationale": "The system explicitly stated it could not find relevant information and did not invent treatment details."
+    }
+  ]
+}

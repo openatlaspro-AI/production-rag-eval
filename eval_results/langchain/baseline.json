@@ -1,0 +1,613 @@
+{
+  "aggregate": {
+    "n_queries_total": 30,
+    "n_queries_evaluated": 27,
+    "n_negative_tests": 3,
+    "precision_at_5": 0.6814814814814815,
+    "recall_at_5": 0.7297325102880658,
+    "mrr": 0.9197530864197531
+  },
+  "by_category": {
+    "broad": {
+      "n_queries": 8,
+      "precision_at_5": 0.85,
+      "recall_at_5": 0.6270833333333333,
+      "mrr": 0.8541666666666666
+    },
+    "specific": {
+      "n_queries": 10,
+      "precision_at_5": 0.62,
+      "recall_at_5": 0.8097222222222222,
+      "mrr": 1.0
+    },
+    "multi_aspect": {
+      "n_queries": 5,
+      "precision_at_5": 0.56,
+      "recall_at_5": 0.7511111111111111,
+      "mrr": 0.9
+    },
+    "negative": {
+      "n_queries": 3
+    },
+    "family_niche": {
+      "n_queries": 4,
+      "precision_at_5": 0.65,
+      "recall_at_5": 0.7083333333333333,
+      "mrr": 0.875
+    }
+  },
+  "per_query": [
+    {
+      "id": 1,
+      "query": "what trends are about US-China geopolitics or trade",
+      "category": "broad",
+      "n_relevant": 8,
+      "retrieved_top_k": [
+        361,
+        371,
+        385,
+        204,
+        101
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.625,
+      "mrr": 1.0,
+      "embed_ms": 626.7725410871208,
+      "retrieve_ms": 11.59966690465808
+    },
+    {
+      "id": 2,
+      "query": "what trending topics relate to Chinese economic indicators",
+      "category": "broad",
+      "n_relevant": 5,
+      "retrieved_top_k": [
+        238,
+        390,
+        239,
+        237,
+        219
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 0.8,
+      "mrr": 1.0,
+      "embed_ms": 666.5868749842048,
+      "retrieve_ms": 8.153417147696018
+    },
+    {
+      "id": 3,
+      "query": "what news involves Iran or the Middle East",
+      "category": "broad",
+      "n_relevant": 10,
+      "retrieved_top_k": [
+        124,
+        172,
+        179,
+        122,
+        212
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.5,
+      "mrr": 1.0,
+      "embed_ms": 791.1270840559155,
+      "retrieve_ms": 5.882415920495987
+    },
+    {
+      "id": 4,
+      "query": "what sports stories are trending right now",
+      "category": "broad",
+      "n_relevant": 8,
+      "retrieved_top_k": [
+        140,
+        313,
+        190,
+        1,
+        334
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 0.5,
+      "mrr": 1.0,
+      "embed_ms": 459.64420796371996,
+      "retrieve_ms": 8.290041936561465
+    },
+    {
+      "id": 5,
+      "query": "what entertainment news is being discussed online",
+      "category": "broad",
+      "n_relevant": 3,
+      "retrieved_top_k": [
+        162,
+        190,
+        210,
+        189,
+        266
+      ],
+      "hits_in_top_5": 2,
+      "precision_at_5": 0.4,
+      "recall_at_5": 0.6666666666666666,
+      "mrr": 0.3333333333333333,
+      "embed_ms": 484.6102078445256,
+      "retrieve_ms": 19.30791698396206
+    },
+    {
+      "id": 6,
+      "query": "what trends involve stock markets and trading",
+      "category": "broad",
+      "n_relevant": 10,
+      "retrieved_top_k": [
+        398,
+        279,
+        212,
+        104,
+        334
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.5,
+      "mrr": 1.0,
+      "embed_ms": 593.250208068639,
+      "retrieve_ms": 12.924750102683902
+    },
+    {
+      "id": 7,
+      "query": "which trends are about Chinese government policy or officials",
+      "category": "broad",
+      "n_relevant": 5,
+      "retrieved_top_k": [
+        322,
+        214,
+        145,
+        220,
+        237
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 0.8,
+      "mrr": 0.5,
+      "embed_ms": 460.46125004068017,
+      "retrieve_ms": 7.613667054101825
+    },
+    {
+      "id": 8,
+      "query": "what topics are most viral on Chinese social media this week",
+      "category": "broad",
+      "n_relevant": 8,
+      "retrieved_top_k": [
+        239,
+        370,
+        68,
+        358,
+        253
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.625,
+      "mrr": 1.0,
+      "embed_ms": 469.61770905181766,
+      "retrieve_ms": 9.11816698499024
+    },
+    {
+      "id": 9,
+      "query": "what is the hantavirus outbreak situation",
+      "category": "specific",
+      "n_relevant": 10,
+      "retrieved_top_k": [
+        94,
+        270,
+        328,
+        370,
+        303
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.5,
+      "mrr": 1.0,
+      "embed_ms": 489.98683295212686,
+      "retrieve_ms": 4.524166928604245
+    },
+    {
+      "id": 10,
+      "query": "tell me about the Hormuz strait military situation",
+      "category": "specific",
+      "n_relevant": 8,
+      "retrieved_top_k": [
+        172,
+        179,
+        123,
+        146,
+        269
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.625,
+      "mrr": 1.0,
+      "embed_ms": 431.96616717614233,
+      "retrieve_ms": 8.209832943975925
+    },
+    {
+      "id": 11,
+      "query": "what is happening with Trump and China relations",
+      "category": "specific",
+      "n_relevant": 6,
+      "retrieved_top_k": [
+        361,
+        101,
+        98,
+        382,
+        214
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 0.6666666666666666,
+      "mrr": 1.0,
+      "embed_ms": 531.7508338484913,
+      "retrieve_ms": 8.152042049914598
+    },
+    {
+      "id": 12,
+      "query": "who is Faker and what is happening in his career",
+      "category": "specific",
+      "n_relevant": 4,
+      "retrieved_top_k": [
+        5,
+        45,
+        259,
+        277,
+        166
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 448.82729183882475,
+      "retrieve_ms": 7.636125199496746
+    },
+    {
+      "id": 13,
+      "query": "what news mentions the World Cup broadcast rights",
+      "category": "specific",
+      "n_relevant": 9,
+      "retrieved_top_k": [
+        76,
+        1,
+        392,
+        190,
+        140
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.5555555555555556,
+      "mrr": 1.0,
+      "embed_ms": 465.0283749215305,
+      "retrieve_ms": 7.827457971870899
+    },
+    {
+      "id": 14,
+      "query": "what is the China men's table tennis team doing",
+      "category": "specific",
+      "n_relevant": 4,
+      "retrieved_top_k": [
+        87,
+        246,
+        387,
+        155,
+        272
+      ],
+      "hits_in_top_5": 3,
+      "precision_at_5": 0.6,
+      "recall_at_5": 0.75,
+      "mrr": 1.0,
+      "embed_ms": 464.02183384634554,
+      "retrieve_ms": 7.221207953989506
+    },
+    {
+      "id": 15,
+      "query": "what are people saying about the Jiajie sandwich incident",
+      "category": "specific",
+      "n_relevant": 1,
+      "retrieved_top_k": [
+        38,
+        14,
+        118,
+        158,
+        67
+      ],
+      "hits_in_top_5": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 4933.388584060594,
+      "retrieve_ms": 11.02816709317267
+    },
+    {
+      "id": 16,
+      "query": "what is the Real Madrid locker room news",
+      "category": "specific",
+      "n_relevant": 1,
+      "retrieved_top_k": [
+        166,
+        118,
+        334,
+        292,
+        318
+      ],
+      "hits_in_top_5": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 428.7397919688374,
+      "retrieve_ms": 6.544832838699222
+    },
+    {
+      "id": 17,
+      "query": "what is happening in Shanghai real estate",
+      "category": "specific",
+      "n_relevant": 1,
+      "retrieved_top_k": [
+        219,
+        237,
+        282,
+        289,
+        287
+      ],
+      "hits_in_top_5": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 506.343332817778,
+      "retrieve_ms": 7.355750072747469
+    },
+    {
+      "id": 18,
+      "query": "what news mentions Wang Yi the Chinese foreign minister",
+      "category": "specific",
+      "n_relevant": 2,
+      "retrieved_top_k": [
+        220,
+        49,
+        361,
+        190,
+        371
+      ],
+      "hits_in_top_5": 2,
+      "precision_at_5": 0.4,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 5836.831167107448,
+      "retrieve_ms": 7.586417021229863
+    },
+    {
+      "id": 19,
+      "query": "what is happening with Chinese tariffs and US trade response",
+      "category": "multi_aspect",
+      "n_relevant": 5,
+      "retrieved_top_k": [
+        214,
+        361,
+        98,
+        101,
+        204
+      ],
+      "hits_in_top_5": 3,
+      "precision_at_5": 0.6,
+      "recall_at_5": 0.6,
+      "mrr": 0.5,
+      "embed_ms": 432.8243338968605,
+      "retrieve_ms": 8.01375019364059
+    },
+    {
+      "id": 20,
+      "query": "what trends discuss housing prices during the May Day holiday",
+      "category": "multi_aspect",
+      "n_relevant": 1,
+      "retrieved_top_k": [
+        219,
+        152,
+        238,
+        334,
+        237
+      ],
+      "hits_in_top_5": 1,
+      "precision_at_5": 0.2,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 906.350125093013,
+      "retrieve_ms": 6.2697092071175575
+    },
+    {
+      "id": 21,
+      "query": "what stories are about food poisoning or restaurant safety",
+      "category": "multi_aspect",
+      "n_relevant": 5,
+      "retrieved_top_k": [
+        209,
+        147,
+        67,
+        288,
+        239
+      ],
+      "hits_in_top_5": 3,
+      "precision_at_5": 0.6,
+      "recall_at_5": 0.6,
+      "mrr": 1.0,
+      "embed_ms": 517.038166988641,
+      "retrieve_ms": 7.832583039999008
+    },
+    {
+      "id": 22,
+      "query": "what trends discuss government corruption or sentencing",
+      "category": "multi_aspect",
+      "n_relevant": 2,
+      "retrieved_top_k": [
+        135,
+        322,
+        217,
+        2,
+        355
+      ],
+      "hits_in_top_5": 2,
+      "precision_at_5": 0.4,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 493.74879198148847,
+      "retrieve_ms": 7.657209178432822
+    },
+    {
+      "id": 23,
+      "query": "what is happening with stock markets and oil prices",
+      "category": "multi_aspect",
+      "n_relevant": 9,
+      "retrieved_top_k": [
+        301,
+        124,
+        48,
+        212,
+        179
+      ],
+      "hits_in_top_5": 5,
+      "precision_at_5": 1.0,
+      "recall_at_5": 0.5555555555555556,
+      "mrr": 1.0,
+      "embed_ms": 550.551624968648,
+      "retrieve_ms": 7.72124994546175
+    },
+    {
+      "id": 24,
+      "query": "how do I implement a binary search tree in Python",
+      "category": "negative",
+      "n_relevant": 0,
+      "retrieved_top_k": [
+        362,
+        284,
+        320,
+        328,
+        370
+      ],
+      "hits_in_top_5": null,
+      "precision_at_5": null,
+      "recall_at_5": null,
+      "mrr": null,
+      "embed_ms": 607.0439999457449,
+      "retrieve_ms": 7.332250010222197
+    },
+    {
+      "id": 25,
+      "query": "what are the best practices for FastAPI authentication",
+      "category": "negative",
+      "n_relevant": 0,
+      "retrieved_top_k": [
+        400,
+        328,
+        209,
+        294,
+        253
+      ],
+      "hits_in_top_5": null,
+      "precision_at_5": null,
+      "recall_at_5": null,
+      "mrr": null,
+      "embed_ms": 4622.068125056103,
+      "retrieve_ms": 8.16979119554162
+    },
+    {
+      "id": 26,
+      "query": "how do I treat my child's ear infection",
+      "category": "negative",
+      "n_relevant": 0,
+      "retrieved_top_k": [
+        284,
+        96,
+        328,
+        383,
+        239
+      ],
+      "hits_in_top_5": null,
+      "precision_at_5": null,
+      "recall_at_5": null,
+      "mrr": null,
+      "embed_ms": 428.722457960248,
+      "retrieve_ms": 6.757625145837665
+    },
+    {
+      "id": 27,
+      "query": "what trending topics are about parenting or raising children",
+      "category": "family_niche",
+      "n_relevant": 3,
+      "retrieved_top_k": [
+        383,
+        96,
+        51,
+        162,
+        241
+      ],
+      "hits_in_top_5": 3,
+      "precision_at_5": 0.6,
+      "recall_at_5": 1.0,
+      "mrr": 1.0,
+      "embed_ms": 429.34529203921556,
+      "retrieve_ms": 7.46129103936255
+    },
+    {
+      "id": 28,
+      "query": "what news discusses marriage or divorce",
+      "category": "family_niche",
+      "n_relevant": 6,
+      "retrieved_top_k": [
+        293,
+        241,
+        248,
+        116,
+        334
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 0.6666666666666666,
+      "mrr": 1.0,
+      "embed_ms": 614.7071670275182,
+      "retrieve_ms": 8.447166066616774
+    },
+    {
+      "id": 29,
+      "query": "what stories mention mothers or motherhood",
+      "category": "family_niche",
+      "n_relevant": 6,
+      "retrieved_top_k": [
+        240,
+        263,
+        96,
+        74,
+        223
+      ],
+      "hits_in_top_5": 4,
+      "precision_at_5": 0.8,
+      "recall_at_5": 0.6666666666666666,
+      "mrr": 1.0,
+      "embed_ms": 391.36054110713303,
+      "retrieve_ms": 7.621250115334988
+    },
+    {
+      "id": 30,
+      "query": "what stories discuss family budgeting or household finances",
+      "category": "family_niche",
+      "n_relevant": 4,
+      "retrieved_top_k": [
+        293,
+        116,
+        285,
+        223,
+        350
+      ],
+      "hits_in_top_5": 2,
+      "precision_at_5": 0.4,
+      "recall_at_5": 0.5,
+      "mrr": 0.5,
+      "embed_ms": 463.8714580796659,
+      "retrieve_ms": 8.115541888400912
+    }
+  ],
+  "k_used_in_run_all": 5,
+  "framework": "langchain"
+}
