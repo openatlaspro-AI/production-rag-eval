@@ -12,7 +12,15 @@ Does NOT import src/config.py — that would fail at boot when the key is missin
 from __future__ import annotations
 
 import os
+import sys
 import time
+from pathlib import Path
+
+# Streamlit Cloud doesn't `pip install -e .`, so the repo root isn't on sys.path.
+# Add it before any `from src.*` import.
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 import streamlit as st
 
@@ -52,6 +60,10 @@ if not api_key:
         "and paste your key, or `export MISTRAL_API_KEY=...`."
     )
     st.stop()
+
+# src/config.py uses pydantic-settings, which reads from env (not st.secrets).
+# Inject the key BEFORE any `from src.config import …` triggers validation.
+os.environ["MISTRAL_API_KEY"] = api_key
 
 
 # ---- Lazy / cached resource loaders --------------------------------------
