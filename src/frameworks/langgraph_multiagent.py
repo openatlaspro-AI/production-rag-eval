@@ -83,3 +83,32 @@ class GraphState(TypedDict):
     embed_tokens_in: int
     embed_latency_ms: float
     retrieve_latency_ms: float
+
+
+def _call_llm(
+    *, agent: str, model: str, system: str, user: str, sub_call_idx: int = 0
+) -> tuple[str, AgentMetrics]:
+    """Single ChatMistralAI call with token + latency capture.
+
+    Constructs a fresh ChatMistralAI per call. The SDK is cheap to instantiate
+    and this avoids threading a client through state. Temperature fixed at 0.2
+    to match the native pipeline.
+    """
+    llm = ChatMistralAI(model=model, temperature=0.2, api_key=settings.mistral_api_key)
+    t0 = time.perf_counter()
+    msg = llm.invoke([SystemMessage(content=system), HumanMessage(content=user)])
+    latency_ms = (time.perf_counter() - t0) * 1000
+    content = msg.content if isinstance(msg.content, str) else str(msg.content)
+    usage = msg.response_metadata.get("token_usage", {}) if hasattr(msg, "response_metadata") else {}
+    tokens_in = int(usage.get("prompt_tokens", 0))
+    tokens_out = int(usage.get("completion_tokens", 0))
+    metrics: AgentMetrics = {
+        "agent": agent,
+        "sub_call_idx": sub_call_idx,
+        "model": model,
+        "tokens_in": tokens_in,
+        "tokens_out": tokens_out,
+        "latency_ms": latency_ms,
+        "usd": calc_cost(model, tokens_in, tokens_out),
+    }
+    return content, metrics
