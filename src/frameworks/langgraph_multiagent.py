@@ -213,3 +213,72 @@ def _researcher_node(state: GraphState) -> dict:
         "embed_latency_ms": state["embed_latency_ms"] + embed_ms_added,
         "retrieve_latency_ms": state["retrieve_latency_ms"] + retrieve_ms_added,
     }
+
+
+_CRITIC_SYSTEM = (
+    "You are a coverage critic. Decide whether the research notes collectively cover "
+    "the user's original question. Respond with STRICT JSON: "
+    '{"verdict": "pass" | "needs_more_research", "refined_queries": [<=2 strings or []]}. '
+    "Only request more research for a CONCRETE gap visible in the notes. If notes "
+    "already address the question or report 'no coverage found' for a topic genuinely "
+    "absent from the corpus, return verdict='pass' with refined_queries=[]."
+)
+
+
+def _critic_node(state: GraphState) -> dict:
+    notes_block = "\n".join(
+        f"[Q{i+1}: {sq}]\n{note}"
+        for i, (sq, note) in enumerate(zip(state["sub_questions"], state["research_notes"]))
+    )
+    user = (
+        f"Original question: {state['query']}\n\n"
+        f"Research notes so far:\n{notes_block}\n\n"
+        "Return the JSON verdict now."
+    )
+    content, metrics = _call_llm(
+        agent="critic",
+        model=state["helper_model"],
+        system=_CRITIC_SYSTEM,
+        user=user,
+    )
+
+    verdict: Literal["pass", "needs_more_research"] = "pass"
+    refined: list[str] = []
+    try:
+        parsed = json.loads(content.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip())
+        if isinstance(parsed, dict):
+            v = parsed.get("verdict", "pass")
+            if v == "needs_more_research":
+                verdict = "needs_more_research"
+            rq = parsed.get("refined_queries", [])
+            if isinstance(rq, list):
+                refined = [s.strip() for s in rq if isinstance(s, str) and s.strip()][:2]
+    except (json.JSONDecodeError, ValueError):
+        pass  # default to pass
+
+    return {
+        "critic_verdict": verdict,
+        "refined_queries": refined,
+        "critic_passes": state["critic_passes"] + 1,
+        "agent_calls": state["agent_calls"] + [metrics],
+    }
+
+
+def _critic_route(state: GraphState) -> str:
+    """Conditional edge: loop back to researcher at most MAX_CRITIC_LOOPS times."""
+    if (
+        state["critic_verdict"] == "needs_more_research"
+        and state["critic_passes"] <= MAX_CRITIC_LOOPS
+        and state["refined_queries"]
+    ):
+        return "researcher_loop"
+    return "writer"
+
+
+def _merge_refined_into_subquestions(state: GraphState) -> dict:
+    """Pre-researcher-loop hop: append refined_queries to sub_questions list so the
+    researcher picks up only the new ones (via the already_processed offset)."""
+    return {
+        "sub_questions": state["sub_questions"] + state["refined_queries"],
+        "refined_queries": [],
+    }
