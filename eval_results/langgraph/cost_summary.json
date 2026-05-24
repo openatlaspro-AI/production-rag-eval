@@ -1,0 +1,43 @@
+{
+  "per_model": {
+    "mistral-large-latest": {
+      "n_queries": 30,
+      "generate_total_usd": 0.0448142,
+      "generate_mean_per_query": 0.0014938066666666666,
+      "generate_median_per_query": 0.0014412,
+      "tokens_in_total": 45391,
+      "tokens_out_total": 7306,
+      "tokens_in_mean": 1513.0333333333333,
+      "tokens_out_mean": 243.53333333333333
+    },
+    "mistral-small-latest": {
+      "n_queries": 30,
+      "generate_total_usd": 0.0120518,
+      "generate_mean_per_query": 0.0004017266666666667,
+      "generate_median_per_query": 0.0003428,
+      "tokens_in_total": 41710,
+      "tokens_out_total": 6183,
+      "tokens_in_mean": 1390.3333333333333,
+      "tokens_out_mean": 206.1
+    }
+  },
+  "pricing_used": {
+    "mistral-small-latest": {
+      "input_per_1m": 0.2,
+      "output_per_1m": 0.6
+    },
+    "mistral-large-latest": {
+      "input_per_1m": 2.0,
+      "output_per_1m": 6.0
+    },
+    "mistral-embed": {
+      "input_per_1m": 0.1,
+      "output_per_1m": 0.0
+    }
+  },
+  "embed_total_usd": 0.00022009999999999998,
+  "embed_total_tokens": 2201,
+  "unique_queries_embedded": 30,
+  "generate_total_usd": 0.056866,
+  "total_eval_usd": 0.0570861
+}
