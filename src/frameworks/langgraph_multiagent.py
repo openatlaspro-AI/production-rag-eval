@@ -146,3 +146,70 @@ def _planner_node(state: GraphState) -> dict:
         "sub_questions": sub_questions,
         "agent_calls": state["agent_calls"] + [metrics],
     }
+
+
+_RESEARCHER_SYSTEM = (
+    "Summarize in 1–2 sentences what the retrieved headlines say about the question. "
+    "Cite as [doc:{id}]. If the retrieved items do not address the question, "
+    "say exactly: 'no coverage found'. Do not invent details."
+)
+
+
+def _researcher_node(state: GraphState) -> dict:
+    # On first pass, work through state['sub_questions']. On second pass (after
+    # critic loop), state['refined_queries'] are appended to sub_questions and
+    # processed; we only run those that haven't been processed yet.
+    already_processed = len(state["research_notes"])
+    queries_to_run = state["sub_questions"][already_processed:]
+
+    new_hits: list[RetrievalHit] = []
+    new_notes: list[str] = []
+    new_calls: list[AgentMetrics] = []
+    embed_tokens_added = 0
+    embed_ms_added = 0.0
+    retrieve_ms_added = 0.0
+
+    seen_ids = {h.id for h in state["hits"]}
+
+    for idx, sq in enumerate(queries_to_run, start=already_processed):
+        # Embed sub-question
+        t0 = time.perf_counter()
+        q_emb, tok_in = embed_query(state["embed_client"], sq)
+        embed_ms_added += (time.perf_counter() - t0) * 1000
+        embed_tokens_added += tok_in
+
+        # Retrieve
+        t1 = time.perf_counter()
+        sq_hits = pgvector_search(state["conn"], q_emb, k=state["k"])
+        retrieve_ms_added += (time.perf_counter() - t1) * 1000
+
+        # Dedup
+        for h in sq_hits:
+            if h.id not in seen_ids:
+                seen_ids.add(h.id)
+                new_hits.append(h)
+
+        # Synthesize
+        ctx_lines = [
+            f"[doc:{h.id}] {h.title_en or h.title or '(no title)'}"
+            for h in sq_hits
+        ]
+        user = f"Question: {sq}\n\nRetrieved:\n" + "\n".join(ctx_lines)
+        note, metrics = _call_llm(
+            agent="researcher",
+            model=state["helper_model"],
+            system=_RESEARCHER_SYSTEM,
+            user=user,
+            sub_call_idx=idx,
+        )
+        new_notes.append(note)
+        new_calls.append(metrics)
+
+    return {
+        "hits": state["hits"] + new_hits,
+        "research_notes": state["research_notes"] + new_notes,
+        "agent_calls": state["agent_calls"] + new_calls,
+        "embed_tokens_in": state["embed_tokens_in"] + embed_tokens_added,
+        "embed_latency_ms": state["embed_latency_ms"] + embed_ms_added,
+        "retrieve_latency_ms": state["retrieve_latency_ms"] + retrieve_ms_added,
+    }
