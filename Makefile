@@ -1,4 +1,4 @@
-.PHONY: help up down logs ingest api eval eval-langchain demo embeddings test fmt clean
+.PHONY: help up down logs ingest api eval eval-langchain eval-langgraph eval-langgraph-smoke demo embeddings test fmt clean
 
 # Default target
 help:
@@ -13,6 +13,8 @@ help:
 	@echo "  make embeddings One-shot: regenerate data/embeddings.npy for the demo"
 	@echo "  make eval       Run full eval suite (retrieval + latency + cost + llm_judge)"
 	@echo "  make eval-langchain  Same eval suite via the LangChain implementation (writes to eval_results/langchain/)"
+	@echo "  make eval-langgraph  Same eval suite via the LangGraph 4-agent pipeline (writes to eval_results/langgraph/)"
+	@echo "  make eval-langgraph-smoke  Single-query sanity check on the multi-agent runner (no files written)"
 	@echo "  make test       Run pytest"
 	@echo "  make fmt        Run ruff format + lint"
 	@echo "  make clean      Remove pycache, eval runs (keeps baseline.json)"
@@ -46,6 +48,12 @@ eval:
 
 eval-langchain:
 	python -m src.eval.run_langchain
+
+eval-langgraph:
+	python -m src.eval.run_langgraph
+
+eval-langgraph-smoke:
+	python -m src.eval.run_langgraph --smoke
 
 test:
 	pytest -v
