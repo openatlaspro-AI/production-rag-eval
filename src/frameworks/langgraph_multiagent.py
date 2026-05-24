@@ -282,3 +282,123 @@ def _merge_refined_into_subquestions(state: GraphState) -> dict:
         "sub_questions": state["sub_questions"] + state["refined_queries"],
         "refined_queries": [],
     }
+
+
+def _writer_node(state: GraphState) -> dict:
+    # Cap context size; otherwise a 3-sub-question run could feed 15 hits into the writer.
+    writer_hits = state["hits"][:MAX_WRITER_CONTEXT_HITS]
+    user_msg = build_user_message(state["query"], writer_hits)
+    content, metrics = _call_llm(
+        agent="writer",
+        model=state["writer_model"],
+        system=SYSTEM_PROMPT,
+        user=user_msg,
+    )
+    return {
+        "final_answer": content,
+        "agent_calls": state["agent_calls"] + [metrics],
+    }
+
+
+def _build_graph():
+    g = StateGraph(GraphState)
+    g.add_node("planner", _planner_node)
+    g.add_node("researcher", _researcher_node)
+    g.add_node("critic", _critic_node)
+    g.add_node("merge_refined", _merge_refined_into_subquestions)
+    g.add_node("writer", _writer_node)
+
+    g.set_entry_point("planner")
+    g.add_edge("planner", "researcher")
+    g.add_edge("researcher", "critic")
+    g.add_conditional_edges(
+        "critic",
+        _critic_route,
+        {"researcher_loop": "merge_refined", "writer": "writer"},
+    )
+    g.add_edge("merge_refined", "researcher")
+    g.add_edge("writer", END)
+    return g.compile()
+
+
+_GRAPH = _build_graph()
+
+
+def langgraph_generate_rag_response(
+    query: str,
+    *,
+    k: int = 5,
+    writer_model: str = "mistral-small-latest",
+    helper_model: str = "mistral-small-latest",
+    conn: Any,
+    embed_client: Any = None,
+    return_agent_metrics: bool = False,
+) -> RagResponse | tuple[RagResponse, list[AgentMetrics]]:
+    """End-to-end multi-agent RAG. Returns the SAME RagResponse the native + LangChain
+    paths return, with cost/timing summed across every agent call.
+
+    If `return_agent_metrics=True`, returns (RagResponse, agent_calls) so the
+    eval runner can persist per-agent breakdowns.
+    """
+    if writer_model not in ALLOWED_MODELS:
+        raise ValueError(f"writer_model {writer_model!r} not in allowlist: {sorted(ALLOWED_MODELS)}")
+    if helper_model not in ALLOWED_MODELS:
+        raise ValueError(f"helper_model {helper_model!r} not in allowlist: {sorted(ALLOWED_MODELS)}")
+
+    own_client = embed_client is None
+    if own_client:
+        embed_client = Mistral(api_key=settings.mistral_api_key)
+
+    init_state: GraphState = {
+        "query": query, "k": k,
+        "writer_model": writer_model, "helper_model": helper_model,
+        "conn": conn, "embed_client": embed_client,
+        "sub_questions": [], "hits": [], "research_notes": [],
+        "critic_verdict": "", "refined_queries": [], "critic_passes": 0,
+        "final_answer": "",
+        "agent_calls": [], "embed_tokens_in": 0,
+        "embed_latency_ms": 0.0, "retrieve_latency_ms": 0.0,
+    }
+
+    t_wall_start = time.perf_counter()
+    final_state = _GRAPH.invoke(init_state)
+    total_wall_ms = (time.perf_counter() - t_wall_start) * 1000
+
+    # Aggregate cost/timing across all agent calls + embed/retrieve telemetry
+    gen_tokens_in = sum(m["tokens_in"] for m in final_state["agent_calls"])
+    gen_tokens_out = sum(m["tokens_out"] for m in final_state["agent_calls"])
+    gen_usd = sum(m["usd"] for m in final_state["agent_calls"])
+    gen_latency_ms = sum(m["latency_ms"] for m in final_state["agent_calls"])
+
+    embed_tokens_in = final_state["embed_tokens_in"]
+    embed_usd = calc_cost(EMBED_MODEL, embed_tokens_in, 0)
+    embed_ms = final_state["embed_latency_ms"]
+    retrieve_ms = final_state["retrieve_latency_ms"]
+
+    response = RagResponse(
+        query=query,
+        answer=final_state["final_answer"],
+        sources=final_state["hits"],
+        model=writer_model,
+        timing=TimingBreakdown(
+            embed_ms=embed_ms,
+            retrieve_ms=retrieve_ms,
+            generate_ms=gen_latency_ms,
+            # total_ms = wall clock of the whole graph (better than naive sum because
+            # researcher embed+search+synthesize stages overlap conceptually but run
+            # sequentially in our implementation; wall is the honest number).
+            total_ms=total_wall_ms,
+        ),
+        cost=CostBreakdown(
+            embed_usd=embed_usd,
+            generate_usd=gen_usd,
+            total_usd=embed_usd + gen_usd,
+            embed_tokens_in=embed_tokens_in,
+            generate_tokens_in=gen_tokens_in,
+            generate_tokens_out=gen_tokens_out,
+        ),
+    )
+
+    if return_agent_metrics:
+        return response, final_state["agent_calls"]
+    return response
