@@ -96,9 +96,9 @@ Native and LangChain are identical (same backend, same single-pass retrieval). M
 | planner | 60 | $0.00313 | 894 | 5.5% |
 | researcher | 213 | $0.00975 | 491 | 17.1% |
 | critic | 81 | $0.00596 | 602 | 10.5% |
-| writer | 60 | $0.03802 | 1398 | 66.8% |
+| writer | 60 | $0.03802 | 1398 | 66.9% |
 
-**Writer dominates at 66.8% of generate cost** because `mistral-large-latest` is ~10× the per-token price of `mistral-small-latest` (which runs planner, researcher, and critic), AND it processes the full capped-at-10 deduped hit context. The 213 researcher calls vs 60 planner/writer calls reflects the 3–5 sub-question fan-out plus the 35% critic-loop triggered top-up calls.
+**Writer dominates at 66.9% of generate cost** because `mistral-large-latest` is ~10× the per-token price of `mistral-small-latest` (which runs planner, researcher, and critic), AND it processes the full capped-at-10 deduped hit context. The 213 researcher calls vs 60 planner/writer calls reflects the 3–5 sub-question fan-out plus the 35% critic-loop triggered top-up calls.
 
 Token usage confirms the picture:
 
@@ -255,7 +255,7 @@ The verdict for **this** corpus is "do not use," but the architectural pattern h
 - **Corpus with atomic-retrieval gaps the planner can route around.** If single-pass retrieval has a known weakness — e.g. terminology drift between query and corpus, or a corpus where common queries embed into a "neutral zone" between semantic clusters — a planner that rewrites the query into multiple paraphrases can rescue recall. Tradeoff: the planner has to be reliably better than the user's original phrasing, which requires either prompt engineering specific to the corpus or a fine-tuned planner. Generic planner prompts (like ours) won't do this.
 - **Reasoning chains beyond a single LLM call.** Example: agentic tool use, where the writer needs to call a calculator, then a search, then verify a citation. The graph structure provides the iteration scaffolding. LangGraph genuinely earns its keep here — the framework is built for this shape, not for "retrieve then generate" RAG.
 - **Long-context or long-horizon tasks with verifiable checkpoints.** The critic-loop pattern (verify → re-research → verify) is the right shape for tasks where the writer's first draft can be evaluated against an objective check ("does the answer cite at least 3 sources for each claim?", "is the proposed SQL syntactically valid?"). Our critic verifies coverage by LLM judgment, which is too noisy to drive meaningful loops. A critic with an objective check (compiler, validator, regex, search) would behave differently.
-- **You can afford 2–4× cost and latency overhead against your SLO.** At small-writer p50=4.7 s and $0.00095/query (vs $0.00057 native), multi-agent is workable for low-volume asynchronous tasks. It is not workable for a synchronous API endpoint with a <2 s latency budget.
+- **You can afford 2–4× cost and latency overhead against your SLO.** On a small-writer-only path: p50=4.7 s and $0.00041/query (vs native's $0.00010/query — a 4.1× ratio because the writer is no longer the dominant cost line). On the blended both-models path averaged across small + large writers: $0.00095/query (vs $0.00057 native, a 1.68× ratio). Either way: workable for low-volume asynchronous tasks; not workable for a synchronous API endpoint with a <2 s latency budget.
 
 ### Do NOT use multi-agent when:
 
