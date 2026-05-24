@@ -112,3 +112,37 @@ def _call_llm(
         "usd": calc_cost(model, tokens_in, tokens_out),
     }
     return content, metrics
+
+
+_PLANNER_SYSTEM = (
+    "You decompose a user question about Chinese-media trends into AT MOST "
+    f"{MAX_SUB_QUESTIONS} focused sub-questions that a retrieval system can answer "
+    "independently. If the question is already atomic, return a single-item list "
+    "containing the original question verbatim. Respond with STRICT JSON: a list of "
+    "strings, no prose, no markdown fences."
+)
+
+
+def _planner_node(state: GraphState) -> dict:
+    user = f"User question: {state['query']}\n\nReturn the JSON list now."
+    content, metrics = _call_llm(
+        agent="planner",
+        model=state["helper_model"],
+        system=_PLANNER_SYSTEM,
+        user=user,
+    )
+    sub_questions: list[str]
+    try:
+        parsed = json.loads(content.strip().removeprefix("```json").removeprefix("```").removesuffix("```").strip())
+        if isinstance(parsed, list) and all(isinstance(s, str) and s.strip() for s in parsed):
+            sub_questions = [s.strip() for s in parsed][:MAX_SUB_QUESTIONS]
+        else:
+            sub_questions = [state["query"]]
+    except (json.JSONDecodeError, ValueError):
+        sub_questions = [state["query"]]
+    if not sub_questions:
+        sub_questions = [state["query"]]
+    return {
+        "sub_questions": sub_questions,
+        "agent_calls": state["agent_calls"] + [metrics],
+    }
