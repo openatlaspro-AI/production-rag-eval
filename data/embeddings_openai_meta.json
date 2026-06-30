@@ -1,0 +1,8 @@
+{
+  "model": "text-embedding-3-small",
+  "n_docs": 400,
+  "dim": 1536,
+  "generated_at": "2026-06-30T15:16:19.130144+00:00",
+  "source_jsonl": "trend_signals.jsonl",
+  "embed_text": "title + title_en (newline-joined)"
+}
