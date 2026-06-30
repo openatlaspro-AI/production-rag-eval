@@ -67,6 +67,24 @@ Reproduce: `make eval` (native) + `make eval-langchain` (LangChain). Each ~$0.03
 
 All 6 JSON files in `eval_results/langchain/` are committed — anyone can compare the runs without re-spending the $0.03.
 
+## Offline multi-method benchmark (OpenAI)
+
+A second, **self-contained** benchmark (`src/retrievers/`, `src/eval/run_offline.py`) compares five retrieval methods on the same 30-query labeled set — runnable offline with only OpenAI embeddings, no Mistral or Postgres. Methods: **dense** (cosine over `text-embedding-3-small`), **BM25** (`rank-bm25`), **hybrid** (BM25 + dense via Reciprocal Rank Fusion, k0=60), **graph** (GraphRAG-lite: lexical entity co-occurrence graph, 1-hop expansion, *no LLM*), and **hybrid + rerank** (MMR diversification).
+
+These use **OpenAI `text-embedding-3-small`**, so the `dense` row is a **NEW baseline**, distinct from the Mistral `eval_results/baseline.json` above — they are not directly comparable and are not conflated. The 30 hand labels were reused after empirically verifying that the Postgres `documents.id` ↔ `trend_signals.jsonl` line alignment holds (details + the honest result write-up in [`eval_results/offline/METHODOLOGY.md`](eval_results/offline/METHODOLOGY.md)).
+
+| retriever | P@5 | P@10 | R@5 | R@10 | MRR |
+|---|---:|---:|---:|---:|---:|
+| bm25 | 0.207 | 0.148 | 0.280 | 0.352 | 0.530 |
+| dense | **0.548** | **0.389** | **0.607** | **0.762** | **0.830** |
+| graph | 0.326 | 0.233 | 0.357 | 0.438 | 0.497 |
+| hybrid | 0.407 | 0.293 | 0.489 | 0.612 | 0.772 |
+| hybrid_rerank | 0.267 | 0.211 | 0.341 | 0.481 | 0.798 |
+
+**Honest headline:** on this set of English, topical/semantic queries over short bilingual headlines, **plain dense retrieval wins decisively** (P@5 0.548, MRR 0.830). BM25 is weak (little lexical overlap between natural-language queries and headline text), and fusing it actually *drags hybrid below dense*; the lexical graph retriever and MMR rerank don't beat dense either. The advanced methods underperform here, and we report that rather than tuning until one "wins" — every number above is read from a committed JSON receipt in `eval_results/offline/`.
+
+Reproduce: `make eval-offline` (embeds the corpus once via OpenAI, caches query embeddings, writes `eval_results/offline/*.json` + `comparison.md`). Install deps with `pip install -e ".[offline]"`.
+
 ## Architecture
 
 ![Architecture diagram](docs/architecture.png)

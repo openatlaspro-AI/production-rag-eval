@@ -57,6 +57,16 @@ demo = [
     "streamlit>=1.40.0",
 ]
 
+# Offline multi-method retrieval benchmark (src/retrievers/, src/eval/run_offline.py).
+# Self-contained with OpenAI embeddings — no Mistral/Postgres. See
+# eval_results/offline/METHODOLOGY.md.
+offline = [
+    "openai>=1.0.0",
+    "rank-bm25>=0.2.2",
+    "networkx>=3.0",
+    "numpy>=1.26.0",
+]
+
 [project.scripts]
 production-rag-eval = "src.cli:app"
 
@@ -65,7 +75,7 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["src", "src.chunking", "src.frameworks", "src.eval"]
+packages = ["src", "src.chunking", "src.frameworks", "src.eval", "src.retrievers"]
 
 [tool.ruff]
 line-length = 100

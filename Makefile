@@ -1,4 +1,4 @@
-.PHONY: help up down logs ingest api eval eval-langchain eval-langgraph eval-langgraph-smoke demo embeddings test fmt clean
+.PHONY: help up down logs ingest api eval eval-langchain eval-langgraph eval-langgraph-smoke eval-offline embed-openai demo embeddings test fmt clean
 
 # Default target
 help:
@@ -15,6 +15,8 @@ help:
 	@echo "  make eval-langchain  Same eval suite via the LangChain implementation (writes to eval_results/langchain/)"
 	@echo "  make eval-langgraph  Same eval suite via the LangGraph 4-agent pipeline (writes to eval_results/langgraph/)"
 	@echo "  make eval-langgraph-smoke  Single-query sanity check on the multi-agent runner (no files written)"
+	@echo "  make embed-openai  Embed the 400-doc corpus with OpenAI text-embedding-3-small (idempotent)"
+	@echo "  make eval-offline  Offline multi-method benchmark (dense/bm25/hybrid/graph/+rerank) → eval_results/offline/"
 	@echo "  make test       Run pytest"
 	@echo "  make fmt        Run ruff format + lint"
 	@echo "  make clean      Remove pycache, eval runs (keeps baseline.json)"
@@ -54,6 +56,12 @@ eval-langgraph:
 
 eval-langgraph-smoke:
 	python -m src.eval.run_langgraph --smoke
+
+embed-openai:
+	python -m scripts.embed_openai
+
+eval-offline: embed-openai
+	python -m src.eval.run_offline
 
 test:
 	pytest -v
